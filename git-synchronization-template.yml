@@ -61,7 +61,7 @@ jobs:
       inputs:
         targetType: 'inline'
         script: |
-          git checkout ${{ parameters.branchName }}
+          git checkout ${{ parameters.targetBranchName }}
           git remote add external ${finalExternalRepository}
           git fetch external
           
