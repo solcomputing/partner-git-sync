@@ -61,9 +61,9 @@ jobs:
       inputs:
         targetType: 'inline'
         script: |
-          echo ${finalExternalRepository}
+          echo $(finalExternalRepository)
           git checkout ${{ parameters.targetBranchName }}
-          git remote add external ${finalExternalRepository}
+          git remote add external $(finalExternalRepository)
           git fetch external
           
           git config user.email "project@intershop.com"
