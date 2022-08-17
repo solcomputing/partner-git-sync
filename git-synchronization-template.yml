@@ -6,9 +6,9 @@ parameters:
 
 # Every partner has it's own agent-pool(s), therefore the name of the pool cannot
 # be hardcoded. But for this special use case it is possible to use the Default pool.
-- name: agentPool
-  type: string
-  default: 'Default'
+# - name: agentPool
+#  type: string
+#  default: 'Default'
 
 # Username for the access to the external repository. The user needs only read permissions.
 - name: externalRepoUser
@@ -49,7 +49,7 @@ jobs:
   - name: finalExternalRepository
     value: https://${{ parameters.externalRepoUser }}:${{ parameters.externalRepoPassword }}@${{ parameters.externalRepo }}
 
-  pool: ${{ parameters.agentPool }}
+  # pool: ${{ parameters.agentPool }}
 
   steps:
     - checkout: self
