@@ -1,0 +1,74 @@
+################################################################################
+# Parameters have to be specified by the caller, to customize the pipeline
+# for a certain project
+################################################################################
+parameters:
+
+# Every partner has it's own agent-pool(s), therefore the name of the pool cannot
+# be hardcoded. But for this special use case it is possible to use the Default pool.
+- name: agentPool
+  type: string
+  default: 'Default'
+
+# Username for the access to the external repository. The user needs only read permissions.
+- name: externalRepoUser
+  type: string
+  default: ''
+
+# Password or token for access to the external repository.
+- name: externalRepoPassword
+  type: string
+  default: ''
+
+# The original git repository must be accessible over https, so that username 
+# and password/token can be added to the url without protocol.
+# Example: bitbucket.org/organization/repository.git
+- name: externalRepo
+  type: string
+  default: ''
+
+# The target branch name for synchronization process, eg. master.
+- name: targetBranchName
+  type: string
+  default: master
+
+# The source branch name for synchronization process, eg. master.
+- name: sourceBranchName
+  type: string
+  default: master
+
+jobs:
+- job: 'SyncRepository'
+  timeoutInMinutes: 100
+  cancelTimeoutInMinutes: 2
+  workspace:
+    clean: all
+
+  
+  variables:
+  - name: finalExternalRepository
+    value: https://${{ parameters.externalRepoUser }}:${{ parameters.externalRepoPassword }}@${{ parameters.externalRepo }}
+
+  pool: ${{ parameters.agentPool }}
+
+  steps:
+    - checkout: self
+      clean: true
+      persistCredentials: true
+
+    - task: Bash@3
+      displayName: 'Git command' 
+      inputs:
+        targetType: 'inline'
+        script: |
+          git checkout ${{ parameters.branchName }}
+          git remote add external ${finalExternalRepository}
+          git fetch external
+          
+          git config user.email "project@intershop.com"
+          git config user.name "project external"
+          
+          git merge --ff --allow-unrelated-histories external/${{ parameters.sourceBranchName }}
+          git push --verbose --force origin ${{ parameters.targetBranchName }}
+  
+
