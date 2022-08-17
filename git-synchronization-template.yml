@@ -49,9 +49,7 @@ jobs:
   - name: finalExternalRepository
     value: https://${{ parameters.externalRepoUser }}:${{ parameters.externalRepoPassword }}@${{ parameters.externalRepo }}
 
-  # pool: ${{ parameters.agentPool }}
-  pool:
-    name: 'Default'
+  pool: ${{ parameters.agentPool }}
 
   steps:
     - checkout: self
