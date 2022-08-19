@@ -74,3 +74,32 @@ Azure DevOps configuration
       - Select "Security"
       - Select "<project name> Build Service (project name)"
       - Change the configuration to "Allow" for "Contribute" and "Create branch"
+
+3. Create pipeline configuration on Azure DevOps, see `Microsoft Documentation <https://docs.microsoft.com/en-us/azure/devops/pipelines/create-first-pipeline>`
+4. Create a job that runs with each commit on the original system. This job should call the pipeline on Azure DevOps.
+    - It is possible to do this over REST, but it is possible to use a prepared client. See https://github.com/IntershopCommunicationsAG/runPipeline
+    - Shell script example:
+
+      .. code-block:: shell
+        
+        #!/bin/bash
+      
+        # call script with the following parameters
+        # ./runPipeline.sh <PAT> <source branch> <target branch>
+        
+        ORGANIZATION="organisation_name"
+        PROJECT="project-name"
+        PIPELINE="pipeline name"
+        # If pipeline rans in a special branch
+        # BRANCH=<branch name>
+        
+        # download latest release for linux
+        curl -L -o runPipeline.tar.gz https://github.com/IntershopCommunicationsAG/runPipeline/releases/latest/download/runPipeline.linux.amd64.tar.gz
+        
+        # unpack download
+        gunzip -c runPipeline.tar.gz | tar xopf -
+        
+        # run application
+        ./runPipeline -org $ORGANIZATION -prj $PROJECT -token $1 -pipeline \"$PIPELINE\" -param sourceBranch=$2 -param targetBranchName=$2  
+
+      The shell script runs aslong the pipeline runs.
