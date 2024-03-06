@@ -19,17 +19,17 @@ parameters:
 # Example: bitbucket.org/organization/repository.git
 - name: externalRepo
   type: string
-  default: ''
+  default: 'https://github.com/solcomputing/aws-wordpress.git'
 
 # The target branch name for synchronization process, eg. master.
 - name: targetBranchName
   type: string
-  default: master
+  default: main
 
 # The source branch name for synchronization process, eg. master.
 - name: sourceBranchName
   type: string
-  default: master
+  default: main
 
 jobs:
 - job: 'SyncRepository'
